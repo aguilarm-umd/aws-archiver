@@ -1,5 +1,6 @@
 import hashlib
 import os
+
 from .exceptions import ConfigException
 from .utils import calculate_relative_path
 

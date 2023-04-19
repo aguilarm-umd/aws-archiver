@@ -4,7 +4,7 @@ import sys
 
 import yaml
 
-from .batch import Batch, DEFAULT_MANIFEST_FILENAME
+from .batch import DEFAULT_MANIFEST_FILENAME, Batch
 from .exceptions import ConfigException, FailureException
 from .manifests.manifest_factory import ManifestFactory
 from .utils import get_first_line

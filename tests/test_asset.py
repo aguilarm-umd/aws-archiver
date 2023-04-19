@@ -1,6 +1,7 @@
 import os
 import unittest
 from unittest.mock import patch
+
 import archiver.asset
 from archiver.asset import Asset
 from archiver.exceptions import ConfigException

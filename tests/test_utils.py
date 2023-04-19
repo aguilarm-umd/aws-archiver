@@ -1,4 +1,5 @@
 import unittest
+
 from archiver.asset import Asset
 from archiver.exceptions import PathOutOfScopeException
 from archiver.utils import calculate_relative_path
