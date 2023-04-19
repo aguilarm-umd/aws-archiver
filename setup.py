@@ -18,7 +18,7 @@ setup(
     install_requires=[i.strip() for i in open("requirements.txt").readlines()],
     python_requires='>=3.7',
     extras_require={  # Optional
-       'dev': ['pycodestyle'],
+       'dev': ['pycodestyle', 'isort'],
        'test': [],
     }
 )
