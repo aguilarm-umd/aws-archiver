@@ -67,9 +67,3 @@ to check compliance with the guidelines can be run using:
 ```bash
 > pycodestyle .
 ```
-
-For organizing imported modules, use isort:
-
-```bash
-> isort .
-```
