@@ -4,16 +4,16 @@ import os
 import sys
 import threading
 from datetime import datetime
-from enum import Enum, unique
 
 import boto3
 from boto3.exceptions import S3UploadFailedError
 from boto3.s3.transfer import TransferConfig
 from botocore.exceptions import ClientError, ProfileNotFound
 
+from enum import Enum, unique
+
 from .asset import Asset
-from .exceptions import (ConfigException, FailureException,
-                         PathOutOfScopeException)
+from .exceptions import ConfigException, PathOutOfScopeException, FailureException
 from .utils import calculate_relative_path
 
 

@@ -6,9 +6,10 @@ import csv
 import os
 import sys
 
-from . import batch, version
-from .deposit import batch_deposit, deposit
+from . import version, batch
+from .deposit import deposit, batch_deposit
 from .exceptions import FailureException
+
 
 STATS_FIELDS = (
     'total_assets', 'assets_found', 'assets_missing', 'assets_ignored', 'assets_transmitted', 'asset_bytes_transmitted',

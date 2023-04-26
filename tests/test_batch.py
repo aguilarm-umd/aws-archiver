@@ -1,6 +1,5 @@
 import os
 import unittest
-
 from archiver.batch import Batch
 from archiver.manifests.manifest_factory import ManifestFactory
 

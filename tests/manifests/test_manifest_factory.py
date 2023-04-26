@@ -1,8 +1,8 @@
 import unittest
 
-from archiver.manifests.inventory_manifest import InventoryManifest
 from archiver.manifests.manifest_factory import ManifestFactory
 from archiver.manifests.md5_sum_manifest import Md5SumManifest
+from archiver.manifests.inventory_manifest import InventoryManifest
 from archiver.manifests.patsy_db_manifest import PatsyDbManifest
 from archiver.manifests.single_asset_manifest import SingleAssetManifest
 

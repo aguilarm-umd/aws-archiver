@@ -1,10 +1,10 @@
 import os
 
-from ..utils import get_first_line
 from .inventory_manifest import InventoryManifest
 from .md5_sum_manifest import Md5SumManifest
 from .patsy_db_manifest import PatsyDbManifest
 from .single_asset_manifest import SingleAssetManifest
+from ..utils import get_first_line
 
 
 class ManifestFactory:
