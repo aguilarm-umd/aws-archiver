@@ -309,6 +309,7 @@ class Batch:
                     'STORAGEPROVIDER': 'AWS',
                     'STORAGELOCATION': f'{self.bucket}/{key_path}'
                 }
+
                 if asset.manifest_row:
                     row.update(asset.manifest_row)
 
