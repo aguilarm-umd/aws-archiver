@@ -250,21 +250,14 @@ class Batch:
                 # Send the file, optionally in multipart, multithreaded mode
                 progress_tracker = ProgressPercentage(asset, self)
                 self.stats['assets_transmitted'] += 1
-                try:
-                    s3_client.upload_file(
-                        asset.local_path,
-                        self.bucket,
-                        key_path,
-                        ExtraArgs=asset.extra_args,
-                        Config=aws_config,
-                        Callback=progress_tracker
-                    )
-                except S3UploadFailedError as e:
-                    self.stats['failed_deposits'] += 1
-                    print(e, file=sys.stderr)
-                    print('Continuing with the next asset', file=sys.stderr)
-                    return
 
+                s3_client.upload_file(
+                    asset.local_path,
+                    self.bucket,
+                    key_path,
+                    ExtraArgs=asset.extra_args,
+                    Config=aws_config,
+                    Callback=progress_tracker
                 # Validate the upload with a head request to get the remote Etag
                 sys.stdout.write('\n\n  Upload complete! Verifying...\n')
                 try:
