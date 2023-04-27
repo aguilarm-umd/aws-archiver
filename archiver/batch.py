@@ -4,16 +4,16 @@ import os
 import sys
 import threading
 from datetime import datetime
+from enum import Enum, unique
 
 import boto3
 from boto3.exceptions import S3UploadFailedError
 from boto3.s3.transfer import TransferConfig
 from botocore.exceptions import ClientError, ProfileNotFound
 
-from enum import Enum, unique
-
 from .asset import Asset
-from .exceptions import ConfigException, PathOutOfScopeException, FailureException
+from .exceptions import (ConfigException, FailureException,
+                         PathOutOfScopeException, HeaderException)
 from .utils import calculate_relative_path
 
 
@@ -240,6 +240,12 @@ class Batch:
                     f'     MD5: {asset.md5}\n'
                     f'    ETAG: {expected_etag}\n\n'
                 )
+
+                def add_header(request, **kwargs):
+                    if 'Content-MD5' not in request.headers:
+                        raise HeaderException(name='Content-MD5', headers=request.headers)
+
+                s3_client.meta.events.register_first('before-sign.s3.*', add_header)
 
                 # Send the file, optionally in multipart, multithreaded mode
                 progress_tracker = ProgressPercentage(asset, self)
