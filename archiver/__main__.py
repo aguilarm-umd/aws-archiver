@@ -3,6 +3,7 @@
 
 import argparse
 import csv
+import logging
 import os
 import sys
 
@@ -10,6 +11,8 @@ from . import version, batch
 from .deposit import deposit, batch_deposit
 from .exceptions import FailureException
 
+
+logging.basicConfig(format='%(message)s', level="INFO")
 
 STATS_FIELDS = (
     'total_assets', 'assets_found', 'assets_missing', 'assets_ignored', 'assets_transmitted', 'asset_bytes_transmitted',
@@ -22,7 +25,7 @@ def print_header():
     title = f'| AWS Archiver |'
     border = '=' * len(title)
     spacer = '|' + ' '*(len(title)-2) + '|'
-    sys.stdout.write(
+    logging.info(
         '\n'.join(['', border, spacer, title, spacer, border, '', ''])
     )
 

@@ -1,4 +1,5 @@
 import csv
+import logging
 import os
 import sys
 
@@ -46,7 +47,7 @@ def deposit(args):
             manifest.load_manifest(batch.results_filename, batch, etag_exists=etag_exists)
 
     except ConfigException as e:
-        print(e, file=sys.stderr)
+        logging.error(e)
         raise FailureException from e
 
     # Do the actual deposit to AWS
@@ -98,7 +99,7 @@ def batch_deposit(args):
                 manifest.load_manifest(config.get('manifest', DEFAULT_MANIFEST_FILENAME), batch,
                                        etag_exists=etag_exists)
             except ConfigException as e:
-                print(e, file=sys.stderr)
+                logging.error(e)
                 raise FailureException from e
 
             print()

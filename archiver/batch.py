@@ -1,5 +1,6 @@
 import csv
 import json
+import logging
 import os
 import sys
 import threading
@@ -32,7 +33,7 @@ def get_s3_client(profile_name, dry_run=False):
         try:
             session = boto3.session.Session(profile_name=profile_name)
         except ProfileNotFound as e:
-            print(e, file=sys.stderr)
+            logging.error(e)
             raise FailureException from e
         return session.resource('s3').meta.client
 
@@ -141,10 +142,10 @@ class Batch:
             self.stats['assets_found'] += 1
         except FileNotFoundError as e:
             self.stats['assets_missing'] += 1
-            print(f'Skipping {path}: {e}', file=sys.stderr)
+            logging.error(f'Skipping {path}: {e}')
         except PathOutOfScopeException as e:
             self.stats['assets_ignored'] += 1
-            print(f'Skipping {path}: {e}', file=sys.stderr)
+            logging.error(f'Skipping {path}: {e}')
 
     def deposit(self, profile_name, chunk_size=None, storage_class=None, max_threads=None, dry_run=False):
         s3_client = get_s3_client(profile_name, dry_run)
@@ -165,7 +166,7 @@ class Batch:
         )
 
         # Display batch configuration information to the user
-        sys.stdout.write(
+        logging.info(
             f'Running deposit command with the following options:\n\n'
             f'  - Target Bucket: {self.bucket}\n'
             f'  - Local Asset Root: {self.asset_root}\n'
@@ -199,7 +200,7 @@ class Batch:
             writer = None
 
         # Process and transfer each asset in the batch contents
-        sys.stdout.write(f'Depositing {len(self.contents)} assets ...\n')
+        logging.info(f'Depositing {len(self.contents)} assets ...\n')
 
         with open(os.path.join(self.log_dir, 'assets.json'), 'w') as json_log:
             for n, asset in enumerate(self.contents, 1):
@@ -230,7 +231,7 @@ class Batch:
                 }
 
                 # Display Asset information to the user
-                sys.stdout.write(
+                logging.info(
                     f'\n{header}\n{"=" * len(header)}\n'
                     f'    FILE: {asset.local_path}\n'
                     f' KEYPATH: {key_path}\n'
