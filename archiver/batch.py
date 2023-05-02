@@ -260,8 +260,9 @@ class Batch:
                     Config=aws_config,
                     Callback=progress_tracker
                 )
+
                 # Validate the upload with a head request to get the remote Etag
-                sys.stdout.write('\n\n  Upload complete! Verifying...\n')
+                logging.info('\n\n  Upload complete! Verifying...\n')
                 try:
                     response = s3_client.head_object(Bucket=self.bucket, Key=key_path)
                 except ClientError as e:
@@ -281,19 +282,19 @@ class Batch:
                 # Pull the AWS etag from the response and strip quotes
                 headers = response['ResponseMetadata']['HTTPHeaders']
                 remote_etag = headers['etag'].replace('"', '')
-                sys.stdout.write(f'    -> Local:  {expected_etag}\n')
-                sys.stdout.write(f'    -> Remote: {remote_etag}\n\n')
+                logging.info(f'    -> Local:  {expected_etag}\n')
+                logging.info(f'    -> Remote: {remote_etag}\n\n')
 
                 if dry_run:
                     expected_etag = remote_etag
 
                 if remote_etag == expected_etag:
                     self.stats['successful_deposits'] += 1
-                    sys.stdout.write(f'  ETag match! Transfer success!\n')
+                    logging.info(f'  ETag match! Transfer success!\n')
                     result = 'success'
                 else:
                     self.stats['failed_deposits'] += 1
-                    sys.stdout.write(f'  Something went wrong.\n')
+                    logging.info(f'  Something went wrong.\n')
                     result = 'failed'
 
                 row = {

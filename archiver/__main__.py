@@ -148,13 +148,16 @@ def main():
     print_header()
     try:
         args.func(args)
-    except FailureException:
+    except FailureException as e:
+        logging.error(e)
         sys.exit(1)
     except KeyboardInterrupt:
         sys.exit(2)
-    except HeaderException:
+    except HeaderException as e:
+        logging.error(e)
         sys.exit(3)
-    except S3UploadFailedError:
+    except S3UploadFailedError as e:
+        logging.error(e)
         sys.exit(4)
 
 
