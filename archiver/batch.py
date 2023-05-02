@@ -259,6 +259,7 @@ class Batch:
                     ExtraArgs=asset.extra_args,
                     Config=aws_config,
                     Callback=progress_tracker
+                )
                 # Validate the upload with a head request to get the remote Etag
                 sys.stdout.write('\n\n  Upload complete! Verifying...\n')
                 try:
