@@ -206,13 +206,13 @@ class Batch:
             for n, asset in enumerate(self.contents, 1):
                 header = f'({n}) {asset.filename.upper()}'
                 if self.overridden_name is not None:
-                    print(f'using overridden name {self.overridden_name}')
+                    logging.info(f'using overridden name {self.overridden_name}')
                     key_path = f'{self.overridden_name}/{asset.relpath}'
                 elif asset.batch_name is not None and asset.batch_name != '':
-                    print(f'Using batch name from the row {asset.batch_name}')
+                    logging.info(f'Using batch name from the row {asset.batch_name}')
                     key_path = f'{asset.batch_name}/{asset.relpath}'
                 else:
-                    print(f'Using the manifestpath {self.manifest.manifest_path}')
+                    logging.info(f'Using the manifestpath {self.manifest.manifest_path}')
                     key_path = f'{self.manifest.manifest_path}/{asset.relpath}'
 
                 # Check if ETAG exists
@@ -266,8 +266,8 @@ class Batch:
                     response = s3_client.head_object(Bucket=self.bucket, Key=key_path)
                 except ClientError as e:
                     self.stats['failed_deposits'] += 1
-                    print(f'Error verifying {self.bucket}/{key_path}: {e}', file=sys.stderr)
-                    print('Continuing with the next asset', file=sys.stderr)
+                    logging.error(f'Error verifying {self.bucket}/{key_path}: {e}')
+                    logging.error('Continuing with the next asset')
                     return
 
                 # Write response metadata to a line-oriented JSON file

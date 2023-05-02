@@ -9,7 +9,8 @@ import sys
 
 from . import version, batch
 from .deposit import deposit, batch_deposit
-from .exceptions import FailureException
+from .exceptions import FailureException, HeaderException
+from boto3.exceptions import S3UploadFailedError
 
 
 logging.basicConfig(format='%(message)s', level="INFO")
@@ -151,6 +152,10 @@ def main():
         sys.exit(1)
     except KeyboardInterrupt:
         sys.exit(2)
+    except HeaderException:
+        sys.exit(3)
+    except S3UploadFailedError:
+        sys.exit(4)
 
 
 if __name__ == "__main__":
