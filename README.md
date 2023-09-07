@@ -186,14 +186,27 @@ You can restore files from AWS Deep Glacier using the scripts [bin/requestfilesf
 1. Install the [AWS CLI](https://aws.amazon.com/cli/). One option for installation is `brew install awscli`.
 
 2. Configure your region and credentials following the instructions in the AWS CLI Reference, [General Options](https://docs.aws.amazon.com/cli/latest/topic/config-vars.html?highlight=credentials#general-options) and [Credentials](https://docs.aws.amazon.com/cli/latest/topic/config-vars.html?highlight=credentials#credentials).
+You can use `export AWS_PROFILE=some-profile` to declare the credential to use--the script will respect the value of the environment variable.
 
-3. Create a CSV input file with the list of files to restore, including the 3 columns bucketname, filelocation, fileserverlocation, without a header row.  The scripts will prompt for the name of the input file. Example file contents:
+3. Create a CSV-like input file with the list of files to restore, including the 3 columns bucketname, filelocation, fileserverlocation, without a header row.  The scripts will prompt for the name of the input file. Example file contents:
 
   ```csv
   libdc-archivebucket-foobarxyz,Archive092/scpa-062057-0018.tif,./restore_directory
+  
   ```
 
-4. Request the restoration from Deep Glacier to an S3 bucket using `bin/requestfilesfromdeepglacier.sh`. The restoration may take up to 48 hours to complete.
+  > **Important**: Due to how the script reads the restore file, a blank newline must exist or the last entry may not be processed.
+
+  > **Note:** This text file is read from a command line utility and is not 
+  > parsed as a CSV. Unlike a CSV, quoted values are passed directly to the
+  > AWS CLI -- _Do not use quotes around "colunms"!_
+
+4. Request the restoration from Deep Glacier to an S3 bucket using `bin/requestfilesfromdeepglacier.sh`. 
+
+    - The restoration may take up to 48 hours to complete. Plan ahead.
+    - A successful request will trigger an email from `Sent emails for Prod S3 <no-reply@sns.amazonaws.com>` of the 
+    event with the subject of `S3 Prod Archive Bucket Event`.
+    - A similar email will come through when the restore is completed.
 
 5. Copy the file from the S3 bucket to the local file system using `bin/copyfromawstolocal.sh`.
 
