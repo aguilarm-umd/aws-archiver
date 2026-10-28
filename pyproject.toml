@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+platforms = ["any"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+
+[project]
+name = "archiver"
+dynamic = ["version"]
+description = "Command-line preservation archiving tool for S3"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.14"
+authors = [
+    { name = "Joshua A. Westgard", email = "westgard@umd.edu" },
+]
+dependencies = [
+    "boto3>=1.43.120",
+    "docutils>=0.23",
+    "pyyaml>=6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+[project.scripts]
+archiver = "archiver.__main__:main"
+
+[project.urls]
+Homepage = "http://github.com/jwestgard/aws-archiver"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint]
+# for now, using the pre-0.16 default ruleset in ruff
+# see https://astral.sh/blog/ruff-v0.16.0#better-default-rule-set
+select = ["E4", "E7", "E9", "F"]

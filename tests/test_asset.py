@@ -75,9 +75,9 @@ class TestAsset(unittest.TestCase):
 
         # Report file size as 2 chunks
         mock_file_size = chunk_size * 2
-        with unittest.mock.patch('os.path.getsize', return_value=mock_file_size):
+        with patch('os.path.getsize', return_value=mock_file_size):
             with self.assertRaises(ConfigException):
-                etag = asset.calculate_etag(chunk_size)
+                asset.calculate_etag(chunk_size)
 
     def test_skips_md5_calculation_for_unchunked_files(self):
         file_path = 'tests/data/files/sample_file_1.txt'
