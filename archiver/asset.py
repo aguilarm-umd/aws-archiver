@@ -24,7 +24,7 @@ class Asset:
         self.extension = os.path.splitext(self.filename)[1].lstrip('.').upper()
         self.relpath = relpath
         self.manifest_row = {
-            k: v for (k, v) in manifest_row.items() if k not in OUTPUT_ONLY_COLS
+            k: v for (k, v) in (manifest_row or {}).items() if k not in OUTPUT_ONLY_COLS
             }
         self.etag = etag
 

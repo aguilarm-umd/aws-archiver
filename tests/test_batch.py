@@ -1,4 +1,5 @@
 import os
+import tempfile
 import unittest
 from archiver.batch import Batch
 from archiver.manifests.manifest_factory import ManifestFactory
@@ -44,13 +45,22 @@ class TestBatch(unittest.TestCase):
 
     def test_add_asset_with_specified_relpath(self):
         sample_file_1_path = os.path.abspath('tests/data/files/sample_file_1.txt')
-        asset_root = os.path.abspath('.')
-        manifest = ManifestFactory.create(None)
-        batch = Batch(manifest, bucket='test_bucket', asset_root=asset_root, log_dir='/tmp')
+        relpath = 'test/specific/relpath/sample_file_1.txt'
 
-        batch.add_asset(sample_file_1_path, relpath='test/specific/relpath/sample_file_1.txt')
+        with tempfile.TemporaryDirectory() as asset_root:
+            staged_path = os.path.join(asset_root, relpath)
+            os.makedirs(os.path.dirname(staged_path))
+            with open(sample_file_1_path, 'rb') as source, open(staged_path, 'wb') as staged:
+                staged.write(source.read())
 
-        self.assertEqual(1, batch.stats['total_assets'])
-        self.assertEqual(1, batch.stats['assets_found'])
-        asset = batch.contents[0]
-        self.assertEqual('test/specific/relpath/sample_file_1.txt', asset.relpath)
+            manifest = ManifestFactory.create(None)
+            batch = Batch(manifest, bucket='test_bucket', asset_root=asset_root, log_dir='/tmp')
+            batch.add_asset(sample_file_1_path, relpath=relpath)
+
+            self.assertEqual(1, batch.stats['total_assets'])
+            self.assertEqual(1, batch.stats['assets_found'])
+
+            asset = batch.contents[0]
+
+            self.assertEqual(relpath, asset.relpath)
+            self.assertEqual(staged_path, asset.local_path)
