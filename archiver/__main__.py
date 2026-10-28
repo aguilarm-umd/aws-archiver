@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import csv
-import os
 import sys
 
 from . import version, batch
@@ -19,7 +17,7 @@ STATS_FIELDS = (
 
 def print_header():
     """Generate script header and display it in the console."""
-    title = f'| AWS Archiver |'
+    title = '| AWS Archiver |'
     border = '=' * len(title)
     spacer = '|' + ' '*(len(title)-2) + '|'
     sys.stdout.write(

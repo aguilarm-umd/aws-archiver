@@ -288,11 +288,11 @@ class Batch:
 
                 if remote_etag == expected_etag:
                     self.stats['successful_deposits'] += 1
-                    sys.stdout.write(f'  ETag match! Transfer success!\n')
+                    sys.stdout.write('  ETag match! Transfer success!\n')
                     result = 'success'
                 else:
                     self.stats['failed_deposits'] += 1
-                    sys.stdout.write(f'  Something went wrong.\n')
+                    sys.stdout.write('  Something went wrong.\n')
                     result = 'failed'
 
                 row = {
